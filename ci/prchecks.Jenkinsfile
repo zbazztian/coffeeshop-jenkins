@@ -16,7 +16,7 @@ pipeline {
         echo 'Successfully built container image.'
         
         withCredentials([
-          usernamePassword(credentialsId: 'container-registry-user-password', usernameVariable: 'USER', passwordVariable: 'PASSWORD')
+          usernamePassword(credentialsId: 'CR', usernameVariable: 'USER', passwordVariable: 'PASSWORD')
         ]){
           sh 'docker tag coffeeshop:latest 471112717199.dkr.ecr.eu-north-1.amazonaws.com/coffeeshop:latest'
           sh '/bin/bash -c "echo -n ${PASSWORD} | docker login -u ${USER} --password-stdin 471112717199.dkr.ecr.eu-north-1.amazonaws.com"'
