@@ -12,8 +12,16 @@ pipeline {
       steps {
         sh 'mvn package -DskipTests'
         echo 'Successfully compiled source code.'
-        sh 'docker build .'
+        sh 'docker build -t coffeeshop:latest .'
         echo 'Successfully built container image.'
+        
+        withCredentials([
+          usernamePassword(credentials: 'container-registry-user-password', usernameVariable: USER, passwordVariable: PASSWORD)
+        ]){
+          sh 'docker tag coffeeshop:latest 471112717199.dkr.ecr.eu-north-1.amazonaws.com/coffeeshop:latest'
+          sh 'echo -n ${PASSWORD} | docker login -u ${USER} --password-stdin 471112717199.dkr.ecr.eu-north-1.amazonaws.com'
+          sh 'docker push 471112717199.dkr.ecr.eu-north-1.amazonaws.com/coffeeshop:latest'
+        }
       }
     }
   }
