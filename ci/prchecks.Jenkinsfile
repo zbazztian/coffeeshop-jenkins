@@ -2,21 +2,18 @@ pipeline {
   agent any
   
   stages {
-    stage("build source code") {
-      steps {
-        sh 'mvn package -DskipTests'
-      }
-    }
     stage("run unit tests") {
       steps {
         sh 'mvn test'
-        echo 'Unit tests succeeded!'
+        echo 'Successfully executed unit tests.'
       }
     }
     stage("build image") {
       steps {
+        sh 'mvn package -DskipTests'
+        echo 'Successfully compiled source code.'
         sh 'docker build .'
-        echo 'Container image built.'
+        echo 'Successfully built container image.'
       }
     }
   }
